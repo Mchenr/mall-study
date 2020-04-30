@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenj.mall.dao.SmsHomeRecommendSubjectDao">
+    <resultMap id="smsHomeRecommendSubjectMap" type="com.chenj.mall.mbg.model.SmsHomeRecommendSubject">
+        <id property="id" jdbcType="BIGINT" column="id"/>
+        <result property="subjectId" jdbcType="BIGINT" column="subject_id"/>
+        <result property="subjectName" jdbcType="VARCHAR" column="subject_name"/>
+        <result property="recommendStatus" jdbcType="INTEGER" column="recommend_status"/>
+        <result property="sort" jdbcType="INTEGER" column="sort"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="smsHomeRecommendSubjectMap">
+        select * from sms_home_recommend_subject where id = #{id}
+    </select>
+
+    <select id="selectAll" resultType="com.chenj.mall.mbg.model.SmsHomeRecommendSubject">
+        select id,
+        subject_id subjectId,
+        subject_name subjectName,
+        recommend_status recommendStatus,
+        sort sort
+        from sms_home_recommend_subject
+        order by sort desc
+    </select>
+
+    <select id="selectBySubjectNameOrRecommendStatus" resultType="com.chenj.mall.mbg.model.SmsHomeRecommendSubject">
+        select id,
+        subject_id subjectId,
+        subject_name subjectName,
+        recommend_status recommendStatus,
+        sort sort
+        from sms_home_recommend_subject
+        <where>
+            <if test="subjectName != null and subjectName != ''">
+                and subject_name like concat('%', #{subjectName}, '%')
+            </if>
+            <if test="recommendStatus != null">
+                and recommend_status = #{recommendStatus}
+            </if>
+        </where>
+        order by sort desc
+    </select>
+
+    <select id="selectBySubjectIdOrSubjectName" resultMap="smsHomeRecommendSubjectMap">
+        select * from sms_home_recommend_subject
+        <where>
+            <choose>
+                <when test="subjectId != null">
+                    and subject_id = #{subjectId}
+                </when>
+                <when test="subjectName != null and subjectName != ''">
+                    and subject_name = #{subjectName}
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--<insert id="insert">-->
+    <!--    insert into sms_home_recommend_subject(id, subject_id, subject_name, recommend_status, sort)-->
+    <!--    values (#{id, jdbcType = BIGINT}, #{subjectId, jdbcType = BIGINT}, #{subjectName, jdbcType = VARCHAR}, #{recommendStatus, jdbcType = INTEGER}, #{sort, jdbcType = INTEGER})-->
+    <!--</insert>-->
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sms_home_recommend_subject(subject_id, subject_name, recommend_status, sort)
+        values (#{subjectId, jdbcType = BIGINT}, #{subjectName, jdbcType = VARCHAR}, #{recommendStatus, jdbcType = INTEGER}, #{sort, jdbcType = INTEGER})
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        insert into sms_home_recommend_subject(subject_id, subject_name, recommend_status
+        <if test="sort != null">
+            ,sort
+        </if>
+        )
+        values (#{subjectId, jdbcType = BIGINT}, #{subjectName, jdbcType = VARCHAR},
+        #{recommendStatus, jdbcType = INTEGER}
+        <if test="sort != null">
+            ,#{sort, jdbcType = INTEGER}
+        </if>
+        )
+    </insert>
+
+    <update id="updateById">
+        update sms_home_recommend_subject
+        set subject_id = #{subjectId, jdbcType = BIGINT},
+        subject_name = #{subjectName, jdbcType = VARCHAR},
+        recommend_status = #{recommendStatus, jdbcType = INTEGER},
+        sort = #{sort, jdbcType = INTEGER}
+        where id = #{id, jdbcType = BIGINT}
+    </update>
+
+    <update id="updateRecommendStatus">
+        update sms_home_recommend_subject
+        set  recommend_status = #{recommendStatus, jdbcType = INTEGER}
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id" index="i">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateByIdSelective">
+        update sms_home_recommend_subject
+        set
+        <if test="subjectId != null">
+            subject_id = #{subjectId, jdbcType = BIGINT},
+        </if>
+        <if test="subjectName != null and subjectName != ''">
+            subject_name = #{subjectName, jdbcType = VARCHAR},
+        </if>
+        <if test="recommendStatus != null">
+            recommend_status = #{recommendStatus, jdbcType = INTEGER},
+        </if>
+        <if test="sort != null">
+            sort = #{sort, jdbcType = INTEGER},
+        </if>
+        id = #{id, jdbcType = BIGINT}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from sms_home_recommend_subject where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from sms_home_recommend_subject
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="id" index="i">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

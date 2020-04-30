@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!--包含Spring boot对logback日志的默认配置-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <!--这里加上springProperty这一项，在下面就可以直接识别到logging.file.path对应的属性值了-->
+    <springProperty scope="context" name="logging.file.path" source="logging.file.path"/>
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+    <!--重写了Spring Boot框架 org/springframework/boot/logging/logback/file-appender.xml 配置-->
+    <appender name="TIME_FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--这里${logging.file.path}取出了logging.file.path的值作为路径，再加上“/希望的文件名”就可以了-->
+            <fileNamePattern>${logging.file.path}/blog-dev.%d{yyyy-MM-dd}.%i</fileNamePattern>
+            <!--保留历史日志一个月的时间-->
+            <maxHistory>30</maxHistory>
+            <!--
+            Spring Boot默认情况下，日志文件10M时，会切分日志文件,这样设置日志文件会在100M时切分日志
+            -->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="TIME_FILE" />
+    </root>
+
+</configuration>
