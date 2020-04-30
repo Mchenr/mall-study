@@ -50,6 +50,13 @@ public interface SmsHomeRecommendSubjectService {
     int insert(SmsHomeRecommendSubjectParam smsHomeRecommendSubjectParam);
 
     /**
+     * 批量插入
+     * @return
+     */
+    @Transactional
+    int insertList(List<SmsHomeRecommendSubjectParam> smsHomeRecommendSubjectParams);
+
+    /**
      * 根据主键更新
      */
     @Transactional

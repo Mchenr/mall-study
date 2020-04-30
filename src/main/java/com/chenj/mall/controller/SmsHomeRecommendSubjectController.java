@@ -76,6 +76,17 @@ public class SmsHomeRecommendSubjectController {
         return CommonResult.failed();
     }
 
+    @ApiOperation("批量新增首页标题推荐")
+    @RequestMapping(value = "/createList", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult create(@RequestBody List<SmsHomeRecommendSubjectParam> smsHomeRecommendSubjectParams){
+        int count = homeRecommendSubjectService.insertList(smsHomeRecommendSubjectParams);
+        if (count > 0){
+            return CommonResult.success(count);
+        }
+        return CommonResult.failed();
+    }
+
     @ApiOperation("根据主键更新")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseBody

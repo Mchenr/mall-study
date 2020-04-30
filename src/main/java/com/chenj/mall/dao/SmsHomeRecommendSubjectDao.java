@@ -49,6 +49,13 @@ public interface SmsHomeRecommendSubjectDao {
     int insertSelective(SmsHomeRecommendSubject smsHomeRecommendSubject);
 
     /**
+     * 批量插入
+     * @param smsHomeRecommendSubjects
+     * @return
+     */
+    int insertList(List<SmsHomeRecommendSubject> smsHomeRecommendSubjects);
+
+    /**
      * 根据主键更新
      * @return
      */

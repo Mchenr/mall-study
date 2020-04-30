@@ -68,6 +68,15 @@
         values (#{subjectId, jdbcType = BIGINT}, #{subjectName, jdbcType = VARCHAR}, #{recommendStatus, jdbcType = INTEGER}, #{sort, jdbcType = INTEGER})
     </insert>
 
+    <insert id="insertList">
+        insert into sms_home_recommend_subject(subject_id, subject_name, recommend_status, sort)
+        values
+        <foreach collection="list" item="subject" separator=",">
+            (#{subject.subjectId, jdbcType = BIGINT}, #{subject.subjectName, jdbcType = VARCHAR},
+            #{subject.recommendStatus, jdbcType = INTEGER}, #{subject.sort, jdbcType = INTEGER})
+        </foreach>
+    </insert>
+
     <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
         insert into sms_home_recommend_subject(subject_id, subject_name, recommend_status
         <if test="sort != null">
@@ -93,7 +102,7 @@
 
     <update id="updateRecommendStatus">
         update sms_home_recommend_subject
-        set  recommend_status = #{recommendStatus, jdbcType = INTEGER}
+        set recommend_status = #{recommendStatus, jdbcType = INTEGER}
         where id in
         <foreach collection="ids" open="(" close=")" separator="," item="id" index="i">
             #{id}

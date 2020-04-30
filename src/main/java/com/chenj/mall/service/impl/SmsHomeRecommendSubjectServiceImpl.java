@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,6 +53,19 @@ public class SmsHomeRecommendSubjectServiceImpl implements SmsHomeRecommendSubje
         smsHomeRecommendSubject.setSubjectId(subjectId);
         return homeRecommendSubjectDao.insertSelective(smsHomeRecommendSubject);
     }
+
+    @Override
+    public int insertList(List<SmsHomeRecommendSubjectParam> smsHomeRecommendSubjectParams) {
+        List<SmsHomeRecommendSubject> smsHomeRecommendSubjects = new ArrayList<>();
+        for (SmsHomeRecommendSubjectParam smsHomeRecommendSubjectParam : smsHomeRecommendSubjectParams) {
+            SmsHomeRecommendSubject smsHomeRecommendSubject = new SmsHomeRecommendSubject();
+            BeanUtils.copyProperties(smsHomeRecommendSubjectParam, smsHomeRecommendSubject);
+            smsHomeRecommendSubject.setSubjectId((long) (homeRecommendSubjectDao.selectAll().size() + 1));
+            smsHomeRecommendSubjects.add(smsHomeRecommendSubject);
+        }
+        return homeRecommendSubjectDao.insertList(smsHomeRecommendSubjects);
+    }
+
 
     @Override
     public int updateById(Long id, SmsHomeRecommendSubjectParam smsHomeRecommendSubjectParam) {
