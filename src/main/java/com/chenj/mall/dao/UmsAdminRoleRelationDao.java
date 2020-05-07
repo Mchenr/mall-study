@@ -18,7 +18,7 @@ public interface UmsAdminRoleRelationDao {
     int insertList(@Param("list") List<UmsAdminRoleRelation> adminRoleRelationList);
 
     /**
-     * 获取用于所有角色
+     * 获取用户所有角色
      */
     List<UmsRole> getRoleList(@Param("adminId") Long adminId);
 

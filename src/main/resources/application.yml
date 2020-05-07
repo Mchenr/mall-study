@@ -38,13 +38,14 @@ mybatis:
   mapper-locations:
     - classpath:dao/*.xml
     - classpath*:com/**/mapper/*.xml
-#  configuration:
-#    map-underscore-to-camel-case: true
+  configuration:
+    map-underscore-to-camel-case: true
 
 logging:
   level:
     root: info
     com.chenj: debug
+    com.chenj.mall.dao: trace
   file:
     path: ./log
 
