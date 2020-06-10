@@ -31,7 +31,7 @@ public class PmsBrandController {
     @Autowired
     private PmsBrandService pmsBrandService;
 
-    @PreAuthorize("hasAnyAuthority('pms:brand:read')")
+//    @PreAuthorize("hasAnyAuthority('pms:brand:read')")
     @ApiOperation("获取全部品牌列表")
     @RequestMapping(value = "/listAll", method = RequestMethod.GET)
     @ResponseBody

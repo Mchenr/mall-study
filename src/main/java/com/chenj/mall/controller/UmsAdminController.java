@@ -62,6 +62,19 @@ public class UmsAdminController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ApiOperation("通过token返回用户最新数据")
+    public CommonResult info(@RequestParam(value = "token") String token){
+        if (token == null) {
+            return CommonResult.failed("token不存在");
+        }
+        UmsAdmin admin = new UmsAdmin();
+        admin.setUsername("admin");
+        admin.setIcon("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        return CommonResult.success(admin);
+    }
+
+    @ResponseBody
     @ApiOperation("更新指定用户信息")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public CommonResult update(@PathVariable Long id, @RequestBody UmsAdmin admin){

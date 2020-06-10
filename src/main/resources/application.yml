@@ -39,7 +39,7 @@ mybatis:
     - classpath:dao/*.xml
     - classpath*:com/**/mapper/*.xml
   configuration:
-    map-underscore-to-camel-case: true
+    map-underscore-to-camel-case: on
 
 logging:
   level:
