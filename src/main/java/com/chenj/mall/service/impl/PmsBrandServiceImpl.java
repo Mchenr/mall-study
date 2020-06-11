@@ -100,7 +100,7 @@ public class PmsBrandServiceImpl implements PmsBrandService {
     @Override
     public int updateFactoryStatus(List<Long> ids, Integer factoryStatus) {
         PmsBrand pmsBrand = new PmsBrand();
-        pmsBrand.setShowStatus(factoryStatus);
+        pmsBrand.setFactoryStatus(factoryStatus);
         PmsBrandExample example = new PmsBrandExample();
         example.createCriteria().andIdIn(ids);
         return brandMapper.updateByExampleSelective(pmsBrand, example);

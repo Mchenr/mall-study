@@ -6,6 +6,7 @@ import com.chenj.mall.dto.UmsAdminParam;
 import com.chenj.mall.mbg.model.UmsAdmin;
 import com.chenj.mall.mbg.model.UmsPermission;
 import com.chenj.mall.service.UmsAdminService;
+import com.chenj.mall.vo.UserInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +69,17 @@ public class UmsAdminController {
         if (token == null) {
             return CommonResult.failed("token不存在");
         }
-        UmsAdmin admin = new UmsAdmin();
-        admin.setUsername("admin");
-        admin.setIcon("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        return CommonResult.success(admin);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName("admin");
+        userInfo.setAvatar("https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        return CommonResult.success(userInfo);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @ApiOperation("注销登录")
+    public CommonResult logout(){
+        return CommonResult.success("已注销");
     }
 
     @ResponseBody
