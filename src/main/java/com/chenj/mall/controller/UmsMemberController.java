@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 会员登录注册管理Controller
- * Created by macro on 2018/8/3.
+ * Created by chen on 2020/6/24.
  */
 @Controller
 @Api(tags = "会员登录注册管理")

@@ -35,4 +35,14 @@ public interface PmsProductCategoryService {
     @Transactional
     int update(Long id, PmsProductCategoryParam pmsProductCategoryParam);
 
+    /**
+     * 修改显示状态
+     */
+    int updateShowStatus(Long id, Integer showStatus);
+
+    /**
+     * 修改导航显示状态
+     */
+    int updateNavStatus(Long id, Integer factoryStatus);
+
 }

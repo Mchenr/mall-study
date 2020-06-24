@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 首页专题推荐
+ * Created by chen on 2020/06/24.
+ */
+
 @Controller
 @RequestMapping("/home/recommendSubject")
 @Api(tags = "首页专题推荐")

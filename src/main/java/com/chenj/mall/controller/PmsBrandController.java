@@ -21,7 +21,7 @@ import java.util.List;
 
 /**
  * 品牌功能Controller
- * Created by macro on 2018/4/26.
+ * Created by chen on 2020/06/24.
  */
 @Controller
 @Api(tags = "商品品牌管理")

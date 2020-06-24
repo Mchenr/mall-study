@@ -3,6 +3,7 @@ package com.chenj.mall.controller;
 import com.chenj.mall.common.api.CommonPage;
 import com.chenj.mall.common.api.CommonResult;
 import com.chenj.mall.dto.PmsProductCategoryParam;
+import com.chenj.mall.mbg.model.PmsBrand;
 import com.chenj.mall.mbg.model.PmsProductCategory;
 import com.chenj.mall.service.PmsProductCategoryService;
 import io.swagger.annotations.Api;
@@ -18,7 +19,7 @@ import java.util.List;
 
 /**
  * 商品分类管理Controller
- * Created by macro on 2018/4/26.
+ * Created by chen on 2020/06/24.
  */
 
 @RestController
@@ -29,7 +30,7 @@ public class PmsProductCategoryController {
     @Autowired
     private PmsProductCategoryService pmsProductCategoryService;
 
-    @PreAuthorize("hasAuthority('pms:productCategory:create')")
+//    @PreAuthorize("hasAuthority('pms:productCategory:create')")
     @ApiOperation("添加商品分类")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public CommonResult create(@Validated @RequestBody PmsProductCategoryParam pmsProductCategoryParam,
@@ -65,7 +66,7 @@ public class PmsProductCategoryController {
             return CommonResult.failed();
         }
     }
-    @PreAuthorize("hasAuthority('pms:productCategory:read')")
+//    @PreAuthorize("hasAuthority('pms:productCategory:read')")
     @ApiOperation("分页查询商品分类列表")
     @RequestMapping(value = "/list/{parentId}", method = RequestMethod.GET)
     public CommonResult<CommonPage<PmsProductCategory>> getList(@PathVariable Long parentId,
@@ -75,4 +76,47 @@ public class PmsProductCategoryController {
         return CommonResult.success(CommonPage.restPage(productCategoryList));
     }
 
+    @ApiOperation("根据id查询分类信息")
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public CommonResult<PmsBrand> getItem(@PathVariable Long id){
+        CommonResult commonResult;
+        PmsProductCategory productCategory = pmsProductCategoryService.getItem(id);
+        if (productCategory != null){
+            commonResult = CommonResult.success(productCategory);
+        }else {
+            commonResult = CommonResult.failed();
+        }
+        return commonResult;
+    }
+
+    @ApiOperation(value = "修改显示状态")
+    @RequestMapping(value = "/update/showStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult updateShowStatus(@RequestParam("id") Long id,
+                                         @RequestParam("showStatus") Integer showStatus){
+        CommonResult commonResult;
+        int count = pmsProductCategoryService.updateShowStatus(id, showStatus);
+        if (count > 0){
+            commonResult = CommonResult.success(count);
+        }else {
+            commonResult = CommonResult.failed();
+        }
+        return commonResult;
+    }
+
+    @ApiOperation(value = "修改导航显示状态")
+    @RequestMapping(value = "/update/navStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult updateNavStatus(@RequestParam("id") Long id,
+                                         @RequestParam("showStatus") Integer showStatus){
+        CommonResult commonResult;
+        int count = pmsProductCategoryService.updateNavStatus(id, showStatus);
+        if (count > 0){
+            commonResult = CommonResult.success(count);
+        }else {
+            commonResult = CommonResult.failed();
+        }
+        return commonResult;
+    }
 }

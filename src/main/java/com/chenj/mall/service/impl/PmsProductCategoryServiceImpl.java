@@ -1,5 +1,6 @@
 package com.chenj.mall.service.impl;
 
+import com.chenj.mall.dao.PmsProductCategoryDao;
 import com.chenj.mall.dto.PmsProductCategoryParam;
 import com.chenj.mall.mbg.mapper.PmsProductCategoryMapper;
 import com.chenj.mall.mbg.model.PmsProductCategory;
@@ -17,6 +18,9 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
 
     @Autowired
     private PmsProductCategoryMapper productCategoryMapper;
+
+    @Autowired
+    private PmsProductCategoryDao pmsProductCategoryDao;
 
     @Override
     public int create(PmsProductCategoryParam pmsProductCategoryParam) {
@@ -54,6 +58,16 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
         setCategoryLevel(productCategory);
 
         return productCategoryMapper.updateByPrimaryKeySelective(productCategory);
+    }
+
+    @Override
+    public int updateShowStatus(Long id, Integer showStatus) {
+        return pmsProductCategoryDao.updateShowStatus(id, showStatus);
+    }
+
+    @Override
+    public int updateNavStatus(Long id, Integer factoryStatus) {
+        return pmsProductCategoryDao.updateNavStatus(id, factoryStatus);
     }
 
     private void setCategoryLevel(PmsProductCategory productCategory) {
