@@ -2,6 +2,7 @@ package com.chenj.mall.controller;
 
 import com.chenj.mall.common.api.CommonPage;
 import com.chenj.mall.common.api.CommonResult;
+import com.chenj.mall.mbg.model.PmsProductAttribute;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategory;
 import com.chenj.mall.service.PmsProductAttributeCategoryService;
 import io.swagger.annotations.Api;
@@ -14,11 +15,12 @@ import java.util.List;
 
 @Controller
 @Api(tags = "商品类型管理")
-@RequestMapping("/productAttr")
-public class PmsProductAttributeCategoryController {
+@RequestMapping("/productAttrCategory")
+public class PmsAttributeCategoryController {
 
     @Autowired
     private PmsProductAttributeCategoryService productAttributeCategoryService;
+
 
     @ApiOperation("分页获取商品类型列表")
     @RequestMapping(value = "/listAttrCate", method = RequestMethod.GET)

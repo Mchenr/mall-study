@@ -1,8 +1,13 @@
 package com.chenj.mall.service.impl;
 
+import com.chenj.mall.dao.PmsProductAttributeDao;
 import com.chenj.mall.mbg.mapper.PmsProductAttributeCategoryMapper;
+import com.chenj.mall.mbg.mapper.PmsProductAttributeMapper;
+import com.chenj.mall.mbg.mapper.PmsProductCategoryAttributeRelationMapper;
+import com.chenj.mall.mbg.model.PmsProductAttribute;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategory;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategoryExample;
+import com.chenj.mall.mbg.model.PmsProductCategoryAttributeRelationExample;
 import com.chenj.mall.service.PmsProductAttributeCategoryService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,9 @@ public class PmsProductAttributeCategoryServiceImpl implements PmsProductAttribu
 
     @Autowired
     private PmsProductAttributeCategoryMapper productAttributeCategoryMapper;
+
+    @Autowired
+    private PmsProductAttributeDao pmsProductAttributeDao;
 
     @Override
     public int createItem(String name) {
@@ -53,4 +61,5 @@ public class PmsProductAttributeCategoryServiceImpl implements PmsProductAttribu
         PmsProductAttributeCategoryExample example = new PmsProductAttributeCategoryExample();
         return productAttributeCategoryMapper.selectByExample(example);
     }
+
 }
