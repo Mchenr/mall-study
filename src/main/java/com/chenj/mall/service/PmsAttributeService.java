@@ -34,10 +34,5 @@ public interface PmsAttributeService {
     /**
      * 分页查找商品属性（参数）
      */
-    List<PmsProductAttribute> list(int pageNum, int pageSize);
-
-    /**
-     * 分页查找商品属性（参数）
-     */
     List<PmsProductAttribute> list(int pageNum, int pageSize, Long cid, int type);
 }

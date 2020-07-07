@@ -27,4 +27,6 @@ public class PmsAttributeParam {
     private Integer relatedStatus;
     @ApiModelProperty(value = "是否支持手动新增；0->不支持；1->支持")
     private Integer handAddStatus;
+    @ApiModelProperty(value = "属性的类型；0->规格；1->参数")
+    private Integer type;
 }

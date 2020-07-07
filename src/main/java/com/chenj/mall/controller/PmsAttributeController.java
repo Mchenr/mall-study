@@ -11,7 +11,10 @@ import com.chenj.mall.service.PmsProductAttributeCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +42,10 @@ public class PmsAttributeController {
     @RequestMapping(value = "/getItem/{id}", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult getItem(@PathVariable Long id) {
-
+        PmsProductAttribute productAttribute = pmsAttributeService.getItem(id);
+        if (productAttribute != null){
+            return CommonResult.success(productAttribute);
+        }
         return CommonResult.failed("该类型不存在");
     }
 
@@ -61,7 +67,8 @@ public class PmsAttributeController {
     @ApiOperation("新增商品属性（参数）")
     @RequestMapping(value = "/addProductAttr", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult addProductAttr(@RequestBody PmsAttributeParam pmsAttributeParam) {
+    public CommonResult addProductAttr(@Validated @RequestBody PmsAttributeParam pmsAttributeParam,
+                                       BindingResult result) {
         CommonResult commonResult;
         int count = pmsAttributeService.createItem(pmsAttributeParam);
         if (count == 1){
