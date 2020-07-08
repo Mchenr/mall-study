@@ -29,7 +29,7 @@ public interface PmsAttributeService {
     /**
      * 根据id删除商品属性（参数）
      */
-    int deleteItem(Long id);
+    int deleteItem(List<Long> ids);
 
     /**
      * 分页查找商品属性（参数）

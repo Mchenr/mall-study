@@ -6,6 +6,7 @@ import com.chenj.mall.mbg.mapper.PmsProductAttributeCategoryMapper;
 import com.chenj.mall.mbg.mapper.PmsProductAttributeMapper;
 import com.chenj.mall.mbg.model.PmsProductAttribute;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategory;
+import com.chenj.mall.mbg.model.PmsProductAttributeExample;
 import com.chenj.mall.service.PmsAttributeService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
@@ -37,20 +38,40 @@ public class PmsAttributeServiceImpl implements PmsAttributeService {
         Long cid = productAttribute.getProductAttributeCategoryId();
         PmsProductAttributeCategory productAttributeCategory =
                 productAttributeCategoryMapper.selectByPrimaryKey(cid);
-        if (productAttribute.getType() == 0){
-            productAttributeCategory.setAttributeCount(productAttributeCategory.getAttributeCount()+1);
-        }else if (productAttribute.getType() == 1){
-            productAttributeCategory.setParamCount(productAttributeCategory.getParamCount()+1);
+        if (productAttribute.getType() == 0) {
+            productAttributeCategory.setAttributeCount(productAttributeCategory.getAttributeCount() + 1);
+        } else if (productAttribute.getType() == 1) {
+            productAttributeCategory.setParamCount(productAttributeCategory.getParamCount() + 1);
         }
+        productAttributeCategoryMapper.updateByPrimaryKeySelective(productAttributeCategory);
         return count;
     }
 
     @Override
     public int updateItem(Long id, PmsAttributeParam pmsAttributeParam) {
-        PmsProductAttribute productAttribute = new PmsProductAttribute();
-        productAttribute.setId(id);
-        BeanUtils.copyProperties(pmsAttributeParam, productAttribute);
-        return productAttributeMapper.updateByPrimaryKeySelective(productAttribute);
+        PmsProductAttribute productAttributeNew = new PmsProductAttribute();
+        productAttributeNew.setId(id);
+        BeanUtils.copyProperties(pmsAttributeParam, productAttributeNew);
+        PmsProductAttribute productAttributeOld = productAttributeMapper.selectByPrimaryKey(id);
+        Integer type = productAttributeNew.getType();
+        if (productAttributeOld != null){
+            if (!productAttributeOld.getProductAttributeCategoryId().equals(productAttributeNew.getProductAttributeCategoryId())){
+                Long cidOld = productAttributeOld.getProductAttributeCategoryId();
+                Long cidNew = productAttributeNew.getProductAttributeCategoryId();
+                PmsProductAttributeCategory productAttributeCategoryOld = productAttributeCategoryMapper.selectByPrimaryKey(cidOld);
+                PmsProductAttributeCategory productAttributeCategoryNew = productAttributeCategoryMapper.selectByPrimaryKey(cidNew);
+                if (type == 0) {
+                    productAttributeCategoryOld.setAttributeCount(productAttributeCategoryOld.getAttributeCount()-1);
+                    productAttributeCategoryNew.setAttributeCount(productAttributeCategoryNew.getAttributeCount()+1);
+                } else if (type == 1) {
+                    productAttributeCategoryOld.setParamCount(productAttributeCategoryOld.getParamCount()-1);
+                    productAttributeCategoryNew.setParamCount(productAttributeCategoryNew.getParamCount()+1);
+                }
+                productAttributeCategoryMapper.updateByPrimaryKeySelective(productAttributeCategoryNew);
+                productAttributeCategoryMapper.updateByPrimaryKeySelective(productAttributeCategoryOld);
+            }
+        }
+        return productAttributeMapper.updateByPrimaryKeySelective(productAttributeNew);
     }
 
     @Override
@@ -59,8 +80,27 @@ public class PmsAttributeServiceImpl implements PmsAttributeService {
     }
 
     @Override
-    public int deleteItem(Long id) {
-        return productAttributeMapper.deleteByPrimaryKey(id);
+    public int deleteItem(List<Long> ids) {
+        PmsProductAttribute productAttribute = productAttributeMapper.selectByPrimaryKey(ids.get(0));
+        Long cid = productAttribute.getProductAttributeCategoryId();
+        PmsProductAttributeCategory productAttributeCategory = productAttributeCategoryMapper.selectByPrimaryKey(cid);
+        if (productAttribute.getType() == 0) {
+            if (productAttributeCategory.getAttributeCount() >= ids.size()) {
+                productAttributeCategory.setAttributeCount(productAttributeCategory.getAttributeCount() - ids.size());
+            }else {
+                productAttributeCategory.setAttributeCount(0);
+            }
+        } else if (productAttribute.getType() == 1) {
+            if (productAttributeCategory.getParamCount() >= ids.size()) {
+                productAttributeCategory.setParamCount(productAttributeCategory.getParamCount() - ids.size());
+            }else {
+                productAttributeCategory.setParamCount(0);
+            }
+        }
+        productAttributeCategoryMapper.updateByPrimaryKeySelective(productAttributeCategory);
+        PmsProductAttributeExample example = new PmsProductAttributeExample();
+        example.createCriteria().andIdIn(ids);
+        return productAttributeMapper.deleteByExample(example);
     }
 
     @Override

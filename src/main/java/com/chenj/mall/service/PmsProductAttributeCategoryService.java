@@ -1,6 +1,5 @@
 package com.chenj.mall.service;
 
-import com.chenj.mall.mbg.model.PmsProductAttribute;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategory;
 
 import java.util.List;

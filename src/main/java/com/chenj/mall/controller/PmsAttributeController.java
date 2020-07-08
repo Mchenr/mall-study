@@ -80,12 +80,12 @@ public class PmsAttributeController {
     }
 
     @ApiOperation("根据id删除商品属性（参数）")
-    @RequestMapping(value = "/deleteAttr/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/deleteAttr/batch", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult deleteAttrCate(@PathVariable Long id) {
+    public CommonResult deleteAttrCate(@RequestParam("ids") List<Long> ids) {
         CommonResult commonResult;
-        int count = pmsAttributeService.deleteItem(id);
-        if (count == 1){
+        int count = pmsAttributeService.deleteItem(ids);
+        if (count >= 1){
             commonResult = CommonResult.success(count);
         }else {
             commonResult = CommonResult.failed();
