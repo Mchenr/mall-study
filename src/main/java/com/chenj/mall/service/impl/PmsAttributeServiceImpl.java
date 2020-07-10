@@ -1,6 +1,5 @@
 package com.chenj.mall.service.impl;
 
-import com.chenj.mall.dao.PmsProductAttributeDao;
 import com.chenj.mall.dto.PmsAttributeParam;
 import com.chenj.mall.mbg.mapper.PmsProductAttributeCategoryMapper;
 import com.chenj.mall.mbg.mapper.PmsProductAttributeMapper;
@@ -12,7 +11,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,12 +22,10 @@ public class PmsAttributeServiceImpl implements PmsAttributeService {
     private PmsProductAttributeMapper productAttributeMapper;
 
     @Autowired
-    private PmsProductAttributeDao productAttributeDao;
-
-    @Autowired
     private PmsProductAttributeCategoryMapper productAttributeCategoryMapper;
 
 
+    @Transactional
     @Override
     public int createItem(PmsAttributeParam pmsAttributeParam) {
         PmsProductAttribute productAttribute = new PmsProductAttribute();
@@ -47,6 +44,7 @@ public class PmsAttributeServiceImpl implements PmsAttributeService {
         return count;
     }
 
+    @Transactional
     @Override
     public int updateItem(Long id, PmsAttributeParam pmsAttributeParam) {
         PmsProductAttribute productAttributeNew = new PmsProductAttribute();
@@ -79,6 +77,7 @@ public class PmsAttributeServiceImpl implements PmsAttributeService {
         return productAttributeMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public int deleteItem(List<Long> ids) {
         PmsProductAttribute productAttribute = productAttributeMapper.selectByPrimaryKey(ids.get(0));
@@ -106,6 +105,9 @@ public class PmsAttributeServiceImpl implements PmsAttributeService {
     @Override
     public List<PmsProductAttribute> list(int pageNum, int pageSize, Long cid, int type) {
         PageHelper.startPage(pageNum, pageSize);
-        return productAttributeDao.productAttrList(cid, type);
+        PmsProductAttributeExample example = new PmsProductAttributeExample();
+        example.createCriteria().andProductAttributeCategoryIdEqualTo(cid).andTypeEqualTo(type);
+        example.setOrderByClause("sort desc");
+        return productAttributeMapper.selectByExample(example);
     }
 }

@@ -2,16 +2,12 @@ package com.chenj.mall.controller;
 
 import com.chenj.mall.common.api.CommonPage;
 import com.chenj.mall.common.api.CommonResult;
-import com.chenj.mall.dao.PmsProductAttributeDao;
 import com.chenj.mall.dto.PmsAttributeParam;
 import com.chenj.mall.mbg.model.PmsProductAttribute;
-import com.chenj.mall.mbg.model.PmsProductAttributeCategory;
 import com.chenj.mall.service.PmsAttributeService;
-import com.chenj.mall.service.PmsProductAttributeCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;

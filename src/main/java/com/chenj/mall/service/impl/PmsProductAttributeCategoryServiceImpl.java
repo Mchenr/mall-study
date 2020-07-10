@@ -1,17 +1,16 @@
 package com.chenj.mall.service.impl;
 
-import com.chenj.mall.dao.PmsProductAttributeDao;
 import com.chenj.mall.mbg.mapper.PmsProductAttributeCategoryMapper;
 import com.chenj.mall.mbg.mapper.PmsProductAttributeMapper;
-import com.chenj.mall.mbg.mapper.PmsProductCategoryAttributeRelationMapper;
 import com.chenj.mall.mbg.model.PmsProductAttribute;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategory;
 import com.chenj.mall.mbg.model.PmsProductAttributeCategoryExample;
-import com.chenj.mall.mbg.model.PmsProductCategoryAttributeRelationExample;
+import com.chenj.mall.mbg.model.PmsProductAttributeExample;
 import com.chenj.mall.service.PmsProductAttributeCategoryService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,8 +26,9 @@ public class PmsProductAttributeCategoryServiceImpl implements PmsProductAttribu
     private PmsProductAttributeCategoryMapper productAttributeCategoryMapper;
 
     @Autowired
-    private PmsProductAttributeDao pmsProductAttributeDao;
+    private PmsProductAttributeMapper productAttributeMapper;
 
+    @Transactional
     @Override
     public int createItem(String name) {
         PmsProductAttributeCategory productAttributeCategory = new PmsProductAttributeCategory();
@@ -38,6 +38,7 @@ public class PmsProductAttributeCategoryServiceImpl implements PmsProductAttribu
         return productAttributeCategoryMapper.insertSelective(productAttributeCategory);
     }
 
+    @Transactional
     @Override
     public int updateItem(Long id, String name) {
         PmsProductAttributeCategory productAttributeCategory = productAttributeCategoryMapper.selectByPrimaryKey(id);
@@ -50,8 +51,12 @@ public class PmsProductAttributeCategoryServiceImpl implements PmsProductAttribu
         return productAttributeCategoryMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public int deleteItem(Long id) {
+        PmsProductAttributeExample example = new PmsProductAttributeExample();
+        example.createCriteria().andProductAttributeCategoryIdEqualTo(id);
+        productAttributeMapper.deleteByExample(example);
         return productAttributeCategoryMapper.deleteByPrimaryKey(id);
     }
 
